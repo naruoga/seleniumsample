@@ -53,7 +53,6 @@ public class ExampleTest {
         assertThat(title(), containsString("Selenium - Google"));
     }
 
-    @Ignore
     @Test
     public void 常に失敗する() {
         open(googleUrl);
