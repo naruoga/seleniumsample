@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 
 import java.io.File;
 
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.*;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -57,7 +58,7 @@ public class ExampleTest {
     @Test
     public void 常に失敗する() {
         open(googleUrl);
-        assertThat(title(), containsString("Gaagle"));
+        $("a[href='//www.google.co.jp/intl/ja/about.html?fg=1']").shouldBe(text("Geegleについて"));
     }
 
     @Test
