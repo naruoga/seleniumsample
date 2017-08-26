@@ -1,20 +1,15 @@
 import org.apache.commons.lang3.SystemUtils;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.io.File;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.testng.AssertJUnit.assertEquals;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Selenide.*;
 
 public class ExampleTest {
-    private WebDriver driver;
     private final String googleUrl = "http://www.google.com";
 
     public String chromeDriverPath() {
@@ -32,31 +27,39 @@ public class ExampleTest {
     @BeforeTest
     public void setup() {
         System.setProperty("webdriver.chrome.driver", chromeDriverPath());
-        driver = new ChromeDriver();
+        System.setProperty("selenide.browser", "Chrome");
     }
 
     @AfterTest
     public void teardown() {
-        driver.quit();
+        close();
     }
 
     @Test
     public void Googleにアクセスしタイトルを調べる() {
-        driver.get(googleUrl);
-        assert title()
-        assertThat(driver.getTitle(), containsString("Google"));
+        open(googleUrl);
+        assert title().contains("Google");
     }
 
     @Test
     public void Googleで検索を行う() throws InterruptedException {
-        driver.get(googleUrl);
-        driver.findElement(By.name("q")).sendKeys("Selenium" + Keys.RETURN);
-        assertThat(driver.getTitle(), containsString("Selenium - Google"));
+        open(googleUrl);
+        $("[name='q'").setValue("Selenium").sendKeys(Keys.RETURN);
+        assert title().contains("Selenium - Google");
     }
 
     @Test(enabled = false)
     public void 常に失敗する() {
-        driver.get(googleUrl);
-        assertThat(driver.getTitle(), containsString("Gaagle"));
+        open(googleUrl);
+        $("a[href='//www.google.co.jp/intl/ja/about.html?fg=1']").shouldBe(text("Geegleについて"));
+    }
+
+    @Test
+    public void スクリーンショットを取る() {
+        open(googleUrl);
+
+        screenshot("screenshot");
+        File png = new File("build/reports/tests/screenshot.png");
+        assert png.exists();
     }
 }
