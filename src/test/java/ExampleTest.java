@@ -1,18 +1,17 @@
 import org.apache.commons.lang3.SystemUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import java.io.File;
 
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.*;
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.testng.AssertJUnit.assertEquals;
 
 public class ExampleTest {
     private WebDriver driver;
@@ -30,43 +29,34 @@ public class ExampleTest {
         return (new File(path)).getAbsolutePath();
     }
 
-    @Before
+    @BeforeTest
     public void setup() {
         System.setProperty("webdriver.chrome.driver", chromeDriverPath());
-        System.setProperty("selenide.browser", "Chrome");
+        driver = new ChromeDriver();
     }
 
-    @After
+    @AfterTest
     public void teardown() {
-        close();
+        driver.quit();
     }
 
     @Test
     public void Googleにアクセスしタイトルを調べる() {
-        open(googleUrl);
-        assertThat(title(), containsString("Google"));
+        driver.get(googleUrl);
+        assert title()
+        assertThat(driver.getTitle(), containsString("Google"));
     }
 
     @Test
     public void Googleで検索を行う() throws InterruptedException {
-        open(googleUrl);
-        $("[name='q'").setValue("Selenium").sendKeys(Keys.RETURN);
-        assertThat(title(), containsString("Selenium - Google"));
+        driver.get(googleUrl);
+        driver.findElement(By.name("q")).sendKeys("Selenium" + Keys.RETURN);
+        assertThat(driver.getTitle(), containsString("Selenium - Google"));
     }
 
-    @Ignore
-    @Test
+    @Test(enabled = false)
     public void 常に失敗する() {
-        open(googleUrl);
-        $("a[href='//www.google.co.jp/intl/ja/about.html?fg=1']").shouldBe(text("Geegleについて"));
-    }
-
-    @Test
-    public void スクリーンショットを取る() {
-        open(googleUrl);
-
-        screenshot("screenshot");
-        File png = new File("build/reports/tests/screenshot.png");
-        assertThat(png.exists(), equalTo(true));
+        driver.get(googleUrl);
+        assertThat(driver.getTitle(), containsString("Gaagle"));
     }
 }
