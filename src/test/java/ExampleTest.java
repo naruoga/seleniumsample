@@ -1,21 +1,15 @@
 import org.apache.commons.lang3.SystemUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import java.io.File;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.*;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ExampleTest {
-    private WebDriver driver;
     private final String googleUrl = "http://www.google.com";
 
     public String chromeDriverPath() {
@@ -30,13 +24,13 @@ public class ExampleTest {
         return (new File(path)).getAbsolutePath();
     }
 
-    @Before
+    @BeforeTest
     public void setup() {
         System.setProperty("webdriver.chrome.driver", chromeDriverPath());
         System.setProperty("selenide.browser", "Chrome");
     }
 
-    @After
+    @AfterTest
     public void teardown() {
         close();
     }
@@ -44,18 +38,17 @@ public class ExampleTest {
     @Test
     public void Googleにアクセスしタイトルを調べる() {
         open(googleUrl);
-        assertThat(title(), containsString("Google"));
+        assert title().contains("Google");
     }
 
     @Test
     public void Googleで検索を行う() throws InterruptedException {
         open(googleUrl);
         $("[name='q'").setValue("Selenium").sendKeys(Keys.RETURN);
-        assertThat(title(), containsString("Selenium - Google"));
+        assert title().contains("Selenium - Google");
     }
 
-    @Ignore
-    @Test
+    @Test(enabled = false)
     public void 常に失敗する() {
         open(googleUrl);
         $("a[href='//www.google.co.jp/intl/ja/about.html?fg=1']").shouldBe(text("Geegleについて"));
@@ -67,6 +60,6 @@ public class ExampleTest {
 
         screenshot("screenshot");
         File png = new File("build/reports/tests/screenshot.png");
-        assertThat(png.exists(), equalTo(true));
+        assert png.exists();
     }
 }

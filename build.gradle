@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.testng', name: 'testng', version: '6.8'
     testCompile 'org.seleniumhq.selenium:selenium-java:3.5.1'
     testCompile 'com.codeborne:selenide:4.5.1'
 }
