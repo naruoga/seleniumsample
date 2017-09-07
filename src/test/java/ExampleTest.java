@@ -3,12 +3,15 @@ import org.openqa.selenium.Keys;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+import ru.yandex.qatools.allure.annotations.Features;
+import ru.yandex.qatools.allure.annotations.Stories;
 
 import java.io.File;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.*;
 
+@Features("Selenide + TestNG + Allureのテスト")
 public class ExampleTest {
     private final String googleUrl = "http://www.google.com";
 
@@ -35,27 +38,31 @@ public class ExampleTest {
         close();
     }
 
+    @Stories("Googleにアクセスしタイトルを調べる")
     @Test
-    public void Googleにアクセスしタイトルを調べる() {
+    public void testTitle() {
         open(googleUrl);
         assert title().contains("Google");
     }
 
+    @Stories("Googleで検索を行う")
     @Test
-    public void Googleで検索を行う() throws InterruptedException {
+    public void searchOnGoogle() throws InterruptedException {
         open(googleUrl);
         $("[name='q'").setValue("Selenium").sendKeys(Keys.RETURN);
         assert title().contains("Selenium - Google");
     }
 
+    @Stories("常に失敗する")
     @Test(enabled = false)
-    public void 常に失敗する() {
+    public void alwaysFail() {
         open(googleUrl);
         $("a[href='//www.google.co.jp/intl/ja/about.html?fg=1']").shouldBe(text("Geegleについて"));
     }
 
+    @Stories("スクリーンショットをとる")
     @Test
-    public void スクリーンショットを取る() {
+    public void takeScreenshot() {
         open(googleUrl);
 
         screenshot("screenshot");
