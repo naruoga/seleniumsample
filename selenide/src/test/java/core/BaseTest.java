@@ -19,15 +19,14 @@ public class BaseTest implements IHookable {
     public String chromeDriverPath() {
         String path;
         if (SystemUtils.IS_OS_WINDOWS) {
-            path = "driver/win32/chromedriver.exe";
+            path = "../driver/win32/chromedriver.exe";
         } else if (SystemUtils.IS_OS_MAC) {
-            path = "driver/mac/chromedriver";
+            path = "../driver/mac/chromedriver";
         } else {
-            path = "driver/linux/chromedriver";
+            path = "../driver/linux/chromedriver";
         }
         return (new File(path)).getAbsolutePath();
     }
-
 
     @BeforeTest
     public void setup() {
